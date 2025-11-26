@@ -1,4 +1,4 @@
-name: Action CI
+name: Action go
 on: workflow_dispatch
 jobs:
   build:
