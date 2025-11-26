@@ -2,13 +2,33 @@ name: go hello
 
 run-name: pipeline run by @${{ github.actor }}
 on: workflow_dispatch
+
+env:
+  PIPE: cicd
+# job level
 jobs:
   build:
+    env:
+      STAGE: dev
     runs-on: ubuntu-latest
+# step level
     steps:
-    - uses: actions/checkout@v3
-    - name: setup Go version
-      uses: actions/setup-go@v2
-      with:
-        go-version: '1.14.0'
-    - run: go run helloworld.go
+      - name: create item with token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Using token ${{ secrets.GITHUB_TOKEN }}"
+          echo "create item in $PIPE stage $STAGE by @${{ github.actor }}
+
+
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#     - name: setup Go version
+#       uses: actions/setup-go@v2
+#       with:
+#         go-version: '1.14.0'
+#     - run: go run helloworld.go
