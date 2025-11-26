@@ -19,6 +19,7 @@ jobs:
         run: |
           echo "Using token ${{ secrets.GITHUB_TOKEN }}"
           echo "create item in $PIPE stage $STAGE by @${{ github.actor }}"
+          echo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
 
 
 
