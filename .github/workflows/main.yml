@@ -1,6 +1,6 @@
 name: go hello
 
-run-name: pipeline run by @${github.actor}
+run-name: pipeline run by @${{ github.actor }}
 on: workflow_dispatch
 jobs:
   build:
