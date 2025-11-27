@@ -1,29 +1,114 @@
-name: Build and Upload Artifact
+# This is a reusable workflow for creating an issue
+
+name: create-failure-issue
+
+# Controls when the workflow will run
 
 on:
+  # Allows you to run this workflow from another workflow
+  
+  workflow_call:
+    inputs:
+      title:
+        required: true
+        type: string
+      body: 
+        required: true
+        type: string
+
+  # Allows you to call this manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      title:
+        description: 'Issue title'
+        required: true
+      body:
+        description: 'Issue body'
+        required: true
+        
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+ 
+  create_issue_on_failure:
+    runs-on: ubuntu-latest 
+  
+    permissions:
+      issues: write 
     steps:
-      # Step 1: Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Step 2: Run a build (example: compile a project)
-      - name: Build project
+      - name: Create issue using REST API
         run: |
-          mkdir output
-          echo "Hello World build artifact" > output/hello.txt
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "title": "Failure: ${{ inputs.title }}",
+            "body": "Details: ${{ inputs.body }}"
+            }' \
+          --fail 
+      
 
-      # Step 3: Upload artifact
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hello-artifact
-          path: output/
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Build and Upload Artifact
+
+# on:
+#   workflow_dispatch:
+
+# jobs:
+#   deploy-prod:
+#     # needs: [build-and-test]
+#     if: github.ref == 'refs/heads/main'
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: production
+#       url: https://github.com/${{ github.repository }}/releases/tag/v${{ vars.PROD_VERSION }}
+#     steps:
+#       - name: Download candidate artifacts
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: archive
+#           path: ./artifacts
+#       - name: GH Release
+#         uses: softprops/action-gh-release@v0.1.15
+#         with:
+#           tag_name: v${{ vars.PROD_VERSION }}
+#           token: ${{ secrets.PROD_TOKEN }}
+#           generate_release_notes: true
+#           name: Production
+#           files: ./artifacts/greetings-deploy.jar
+
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     # Step 1: Checkout code
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     # Step 2: Run a build (example: compile a project)
+  #     - name: Build project
+  #       run: |
+  #         mkdir output
+  #         echo "Hello World build artifact" > output/hello.txt
+
+  #     # Step 3: Upload artifact
+  #     - name: Upload build artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: hello-artifact
+  #         path: output/
 
 
 
