@@ -1,13 +1,22 @@
 name: Action CI
 on: 
   workflow_dispatch:
+
 jobs:
-  deploy-prod:
+  test-secret-scan:
     runs-on: ubuntu-latest
-    environment: production
     steps:
-      - name: Deploy
-        run: echo "Deploying version ${{ vars.PROD }}"
+      - name: Simulate secret leak
+        run: |
+          echo "AWS_SECRET_ACCESS_KEY=AKIAIOSFKEFAKEKEY1234"    
+          
+# jobs:
+#   deploy-prod:
+#     runs-on: ubuntu-latest
+#     environment: production
+#     steps:
+#       - name: Deploy
+#         run: echo "Deploying version ${{ vars.PROD }}"
 
 
 
