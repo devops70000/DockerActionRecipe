@@ -1,31 +1,80 @@
-name: go hello
+name: Build and Upload Artifact
 
-run-name: pipeline run by @${{ github.actor }}
-on: workflow_dispatch
-
-
-
+on:
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: gradle/actions/setup-gradle@v3
-      - name: Build with Gradle
-        run: ./gradlew build
-      - uses: gradle/gradle-build-action@v3
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Run a build (example: compile a project)
+      - name: Build project
+        run: |
+          mkdir output
+          echo "Hello World build artifact" > output/hello.txt
+
+      # Step 3: Upload artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          arguments: build
-      - uses: gradle/gradle-build-action@v3
-        with:
-          arguments: test
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4        
-        with:
-          name: archive.zip
-          path: build/libs
+          name: hello-artifact
+          path: output/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: go hello
+
+# run-name: pipeline run by @${{ github.actor }}
+# on: workflow_dispatch
+
+
+
+
+# jobs:
+#   build-and-test:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up JDK 11
+#         uses: gradle/actions/setup-gradle@v3
+#       - name: Build with Gradle
+#         run: ./gradlew build
+#       - uses: gradle/gradle-build-action@v3
+#         with:
+#           arguments: build
+#       - uses: gradle/gradle-build-action@v3
+#         with:
+#           arguments: test
+#       - name: Upload Artifact
+#         uses: actions/upload-artifact@v4        
+#         with:
+#           name: archive.zip
+#           path: build/libs
 
 
 # env:
