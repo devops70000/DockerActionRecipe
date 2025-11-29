@@ -1,15 +1,69 @@
-name: Action CI
-on: 
-  workflow_dispatch:
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  test-secret-scan:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Simulate secret leak
-        run: |
-          echo "AWS_SECRET_ACCESS_KEY=AKIAIOSFKEFAKEKEY1234"    
-          
+      - name: Checkout GitHub Actions
+        uses: actions/checkout@v5
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 3.1.301
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: Publish
+        run: dotnet publish -c Release -o dotnetcorewebapp
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: ./dotnetcorewebapp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Action CI
+# on: 
+#   workflow_dispatch:
+
+# jobs:
+#   test-secret-scan:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Simulate secret leak
+#         run: |
+#           echo "AWS_SECRET_ACCESS_KEY=AKIAIOSFKEFAKEKEY1234"    
+
 # jobs:
 #   deploy-prod:
 #     runs-on: ubuntu-latest
