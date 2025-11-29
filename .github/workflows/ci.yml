@@ -1,41 +1,60 @@
-name: .NET Core
+name: VariableDemo
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
+
+env:
+  user_name: "Chaminda"
+  demo_name: "Variable Demo"
 
 jobs:
-  build:
+  VariableUsageJob:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout GitHub Actions
-        uses: actions/checkout@v5
+      - name: Using Workflow Variables
+        run: |
+          echo "Hello, $user_name!"
+          echo "Welcome to $demo_name!!!"
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 3.1.301
 
-      - name: Install dependencies
-        run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+# name: .NET Core
 
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
 
-      - name: Publish
-        run: dotnet publish -c Release -o dotnetcorewebapp
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-artifact
-          path: ./dotnetcorewebapp
+#     steps:
+#       - name: Checkout GitHub Actions
+#         uses: actions/checkout@v5
+
+#       - name: Setup .NET Core
+#         uses: actions/setup-dotnet@v5
+#         with:
+#           dotnet-version: 3.1.301
+
+#       - name: Install dependencies
+#         run: dotnet restore
+
+#       - name: Build
+#         run: dotnet build --configuration Release --no-restore
+
+#       - name: Test
+#         run: dotnet test --no-restore --verbosity normal
+
+#       - name: Publish
+#         run: dotnet publish -c Release -o dotnetcorewebapp
+
+#       - name: Upload Artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: my-artifact
+#           path: ./dotnetcorewebapp
 
 
 
